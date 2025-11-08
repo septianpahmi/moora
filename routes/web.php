@@ -1,10 +1,12 @@
 <?php
 
-use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AlternatifController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\KriteriController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\HomeController;
+use App\Http\Controllers\RegisteredAlternatifController;
+use App\Http\Controllers\SubkriteriaController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AdmminController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -18,24 +20,34 @@ use App\Http\Controllers\AdmminController;
 
 
 
-Route::get('/',[HomeController::class,'index']);
-
-Route::get('/home',[HomeController::class,'redirect']);
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
+Route::get('/', function () {
+    return view('auth.login');
+});
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    Route::get('/kriteria', [KriteriController::class, 'index'])->name('kriteria');
+    Route::post('/kriteria/create', [KriteriController::class, 'create'])->name('kriteria.create');
+    Route::get('/kriteria/delete/{id}', [KriteriController::class, 'delete'])->name('kriteria.delete');
+    Route::post('/kriteria/update/{id}', [KriteriController::class, 'update'])->name('kriteria.update');
+    
+    Route::get('/subkriteria', [SubkriteriaController::class, 'index'])->name('subkriteria');
+    Route::post('/subkriteria/create', [SubkriteriaController::class, 'create'])->name('subkriteria.create');
+    Route::get('/subkriteria/delete/{id}', [SubkriteriaController::class, 'delete'])->name('subkriteria.delete');
+    Route::post('/subkriteria/update/{id}', [SubkriteriaController::class, 'update'])->name('subkriteria.update');
+
+    Route::get('/alternatif', [AlternatifController::class, 'index'])->name('alternatif');
+    Route::post('/alternatif/create', [AlternatifController::class, 'create'])->name('alternatif.create');
+    Route::get('/alternatif/delete/{id}', [AlternatifController::class, 'delete'])->name('alternatif.delete');
+    Route::post('/alternatif/update/{id}', [AlternatifController::class, 'update'])->name('alternatif.update');
+    
+    Route::get('/perhitungan', [RegisteredAlternatifController::class, 'index'])->name('perhitungan');
+    Route::post('/perhitungan/create/{id}', [RegisteredAlternatifController::class, 'create'])->name('perhitungan.create');
+
 });
-
-Route::get('/add_alternatif_view',[AdminController::class,'addalternatif']);
-
-Route::get('/add_kriteria_view',[AdminController::class,'addkriteria']);
-
-Route::get('/add_subkriteria_view',[AdminController::class,'addsubkriteria']);
 
 require __DIR__.'/auth.php';
