@@ -11,10 +11,14 @@ class RegisteredAlternatif extends Model
 
     protected $fillable = [
         'alternatif_id',
-        'kriteria'
+        'subkrit_id'
     ];
 
     public function alternatif(){
         return $this->belongsTo(Alternatif::class, 'alternatif_id');
+    }
+
+    public function subkrit(){
+        return $this->belongsTo(SubKriteria::class,'subkrit_id');
     }
 }

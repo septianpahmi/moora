@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('registered_alternatifs', function (Blueprint $table) {
             $table->id();
             $table->foreignId('alternatif_id')->constrained()->cascadeOnDelete();
-            $table->string('kriteria');
+            $table->foreignId('subkrit_id')->constrained('sub_kriterias')->cascadeOnDelete();
+            $table->enum('status',['Pending','Success','Filed'])->default('Pending');
             $table->timestamps();
         });
     }

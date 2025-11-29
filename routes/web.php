@@ -47,6 +47,10 @@ Route::middleware('auth')->group(function () {
     
     Route::get('/perhitungan', [RegisteredAlternatifController::class, 'index'])->name('perhitungan');
     Route::post('/perhitungan/create/{id}', [RegisteredAlternatifController::class, 'create'])->name('perhitungan.create');
+    //perhitungan
+    Route::get('/perhitungan/moora', [RegisteredAlternatifController::class, 'moora'])->name('perhitungan.moora');
+    Route::get('/perhitungan/matrik-x', [RegisteredAlternatifController::class, 'matrik'])->name('perhitungan.matrik');
+    Route::get('/perhitungan/normalisasi-r', [RegisteredAlternatifController::class, 'normalisasi'])->name('perhitungan.normalisasi');
 
 });
 
