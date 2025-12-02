@@ -13,10 +13,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::create([
-            'name' => 'Admin',
-            'email' => 'admin@moora.com',
-            'password' => bcrypt('password')
+        $this->call([
+            UserSeeder::class,
+            KriteriaSeeder::class,
+            PeriodeSeeder::class,
         ]);
     }
 }

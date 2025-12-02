@@ -5,18 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Kriteria extends Model
+class Periode extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'code',
-        'title',
-        'bobot',
-        'type',
+        'nama',
+        'date_start',
+        'date_end',
     ];
 
-    public function subkriteria()
+    public function periodenilai()
     {
-        return $this->hasMany(SubKriteria::class);
+        return $this->hasMany(Penilaian::class);
     }
 }

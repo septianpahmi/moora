@@ -1,69 +1,52 @@
 @include('dashboard.partials.header')
 @include('dashboard.partials.navbar')
 @include('dashboard.partials.sidebar')
-  <div class="content-wrapper">
+<div class="content-wrapper">
     <div class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1 class="m-0">{{$title}}</h1>
-            <ol class="breadcrumb ">
-              <li class="breadcrumb-item"><a href="{{route('dashboard')}}">Dashboard</a></li>
-              <li class="breadcrumb-item active">{{$title}}</li>
-            </ol>
-          </div>
-          <div class="col-sm-6">
-            <a href="{{route('perhitungan.moora')}}" class="btn btn-success float-right">Hitung</a>
-          </div>
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">{{ $title }}</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <!-- <li class="breadcrumb-item"><a href="#">Home</a></li> -->
+                        <li class="breadcrumb-item active">{{ $title }}</li>
+                    </ol>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
     <section class="content">
-      <div class="container-fluid">
-        <div class="row">
-            <div class="col-12">
-        <div class="card">
-              <div class="card-header">
-                <h3 class="card-title">DataTable {{$title}}</h3>
-              </div>
-              <div class="card-body">
-                <table id="example1" class="table table-bordered table-striped">
-                  <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Nama</th>
-                    <th>Jabatan</th>
-                    <th>NIP</th>
-                    <th></th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                    @foreach($data as $item)
-                    <tr>
-                        <td>{{$loop->iteration}}</td>
-                        <td>{{$item->nama}}</td>
-                        <td>{{$item->jabatan}}</td>
-                        <td>{{$item->nip}}</td>
-                        <td>
-                          @if($item->regAlternatif->isEmpty())
-                              <div class="btn-group btn-block">
-                                  <button type="button" class="btn btn-sm btn-warning"
-                                      data-toggle="modal" data-target="#perhitungan{{ $item->id }}">
-                                      <i class="fas fa-edit"></i>
-                                  </button>
-                              </div>
-                          @endif
-                        </td>
-                    </tr>
-                    @include('dashboard.perhitungan.create')
-                    @endforeach
-                  </tbody>
-                </table>
-              </div>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Pilih Periode untuk memulai perhitungan menggunakan Metode MOORA</h3>
+                        </div>
+                        <form action="{{ route('perhitungan.moora') }}" method="GET" enctype="multipart/form-data">
+                            @csrf
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="periode_id">Pilih Periode</label>
+                                    <select name="periode_id" id="periode_id" class="form-control" required>
+                                        <option value="" selected disabled>--Pilih Periode--</option>
+                                        @foreach ($data as $item)
+                                            <option value="{{ $item->id }}">{{ $item->nama }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="card-footer text-center">
+                                <button type="submit" class="btn btn-primary">Selanjutnya</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
-        </div>
-        </div>
-      </div>
-    </section>
-  </div>
+</div>
+</section>
+</div>
 @include('dashboard.partials.footer')

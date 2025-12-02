@@ -8,18 +8,19 @@ use Illuminate\Database\Eloquent\Model;
 class SubKriteria extends Model
 {
     use HasFactory;
-
-    protected $fillable=[
+    protected $fillable = [
         'kriteria_id',
         'title',
         'bobot',
     ];
 
-    public function kriteria(){
-        return $this->belongsTo(Kriteria::class,'kriteria_id');
+    public function kriteria()
+    {
+        return $this->belongsTo(Kriteria::class, 'kriteria_id');
     }
 
-    public function regAlternatif(){
-        return $this->hasMany(RegisteredAlternatif::class);
+    public function subnilai()
+    {
+        return $this->hasMany(Penilaian::class);
     }
 }

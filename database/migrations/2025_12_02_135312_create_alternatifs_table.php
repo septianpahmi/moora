@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('alternatifs', function (Blueprint $table) {
             $table->id();
+            $table->string('image');
+            $table->integer('nip')->unique();
             $table->string('nama');
             $table->string('jabatan');
-            $table->integer('nip')->nullable();
-            $table->string('foto')->nullable();
             $table->timestamps();
         });
     }

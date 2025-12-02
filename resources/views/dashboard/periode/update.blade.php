@@ -1,30 +1,36 @@
 @foreach ($data as $item)
-    <div class="modal fade" id="subkriteriaupdate{{ $item->id }}">
+    <div class="modal fade" id="periode{{ $item->id }}">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Update SubKriteria</h4>
+                    <h4 class="modal-title">Update Periode</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form action="{{ route('subkriteria.update', ['id' => $item->id, 'kriteria' => $kriteria->id]) }}"
-                    method="POST" enctype="multipart/form-data">
+                <form action="{{ route('periode.update', $item->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="modal-body">
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="title">Title<code>*</code></label>
-                                    <input type="text" name="title" value="{{ $item->title }}" id="title"
-                                        class="form-control" required>
+                                    <label for="nama">Nama<code>*</code></label>
+                                    <input type="text" name="nama" value="{{ $item->nama }}" id="nama"
+                                        class="form-control" required autofocus>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="bobot">Bobot<code>*</code></label>
-                                    <input type="text" name="bobot" value="{{ $item->bobot }}" maxlength="3"
-                                        max="100" id="bobot" class="form-control numeric" required>
+                                    <label for="date_start">Tanggal Mulai<code>*</code></label>
+                                    <input type="date" name="date_start" value="{{ $item->date_start }}"
+                                        id="date_start" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="date_end">Tanggal Selesai<code>*</code></label>
+                                    <input type="date" name="date_end" id="date_end" value="{{ $item->date_end }}"
+                                        class="form-control" required>
                                 </div>
                             </div>
                         </div>

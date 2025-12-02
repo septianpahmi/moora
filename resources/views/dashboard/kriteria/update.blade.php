@@ -1,55 +1,60 @@
-@foreach($data as $item)
-<div class="modal fade" id="kriteria{{$item->id}}">
+@foreach ($data as $item)
+    <div class="modal fade" id="kriteria{{ $item->id }}">
         <div class="modal-dialog modal-lg">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h4 class="modal-title">Update Kriteria</h4>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <form action="{{route('kriteria.update', $item->id)}}" method="post" enctype="multipart/form-data">
-                @csrf
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-6">
-                        <div class="form-group">
-                            <label for="code">Kode</label>
-                            <input type="text" class="form-control" value="{{$item->code}}" id="code" name="code" required>
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="form-group">
-                            <label for="title">Kriteria</label>
-                            <input type="text" class="form-control" id="title" value="{{$item->title}}" name="title" required>
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="form-group">
-                            <label for="bobot">Bobot</label>
-                            <input type="text" class="form-control" id="bobot" value="{{$item->bobot}}" name="bobot" required>
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="form-group">
-                            <label for="type">Tipe</label>
-                            <select name="type" id="type" class="form-control" required>
-                                <option value="" selected disabled>Pilih Tipe</option>
-                                <option value="benefit">Benefit</option>
-                                <option value="cost">Cost</option>
-                            </select>
-                        </div>
-                    </div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Update Kriteria</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
+                <form action="{{ route('kriteria.update', $item->id) }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="code">Kode<code>*</code></label>
+                                    <input type="text" value="{{ $item->code }}" name="code" id="code"
+                                        class="form-control" required autofocus>
+                                </div>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="form-group">
+                                    <label for="title">Title<code>*</code></label>
+                                    <input type="text" name="title" value="{{ $item->title }}" id="title"
+                                        class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="bobot">Bobot<code>*</code></label>
+                                    <input type="text" name="bobot" value="{{ $item->bobot }}" maxlength="3"
+                                        max="100" id="bobot" class="form-control numeric" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="type">Tipe<code>*</code></label>
+                                    <select name="type" id="type" class="form-control" required>
+                                        <option value="" selected disabled>-- Pilih Tipe --</option>
+                                        <option value="Benefit" {{ $item->type == 'Benefit' ? 'selected' : '' }}>Benefit
+                                        </option>
+                                        <option value="Cost" {{ $item->type == 'Cost' ? 'selected' : '' }}>Cost
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                    </div>
+                </form>
             </div>
-            <div class="modal-footer justify-content-between">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              <button type="submit" class="btn btn-primary">Save</button>
-            </div>
-            </form>
-          </div>
-          <!-- /.modal-content -->
+            <!-- /.modal-content -->
         </div>
         <!-- /.modal-dialog -->
-      </div>
+    </div>
 @endforeach

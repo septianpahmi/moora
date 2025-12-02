@@ -9,13 +9,14 @@ class Alternatif extends Model
 {
     use HasFactory;
     protected $fillable = [
+        'image',
+        'nip',
         'nama',
         'jabatan',
-        'nip',
-        'foto',
     ];
 
-    public function regAlternatif(){
-        return $this->hasMany(RegisteredAlternatif::class);
+    public function alternatifnilai()
+    {
+        return $this->hasMany(Penilaian::class);
     }
 }

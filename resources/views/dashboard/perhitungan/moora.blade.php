@@ -14,9 +14,9 @@
                 </div>
                 <div class="col-sm-6">
                     <button type="button" class="btn btn-success float-sm-right" data-toggle="modal"
-                        data-target="#kriteria">Tambah {{ $title }}</button>
+                        data-target="#moora">Tambah Alternatif</button>
                 </div>
-                @include('dashboard.kriteria.create')
+                @include('dashboard.perhitungan.create')
             </div>
         </div>
     </div>
@@ -26,7 +26,8 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">DataTable {{ $title }}</h3>
+                            <h3 class="card-title">{{ $title }} </h3>
+                            <h3 class="card-title font-weight-bold float-sm-right"> {{ $data->nama }}</h3>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
@@ -34,39 +35,30 @@
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>Kode</th>
-                                        <th>Kriteria</th>
-                                        <th>Bobot</th>
-                                        <th>Tipe</th>
+                                        <th>NIP</th>
+                                        <th>Nama</th>
+                                        <th>Jabatan</th>
                                         <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($data as $item)
+                                    @foreach ($penilaian as $item)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
-                                            <th>{{ $item->code }}</th>
-                                            <td>{{ $item->title }}</td>
-                                            <td>{{ number_format($item->bobot, 0) }}</td>
-                                            <td>{{ $item->type }}</td>
+                                            <td>{{ $item->alternatif->nip }}</td>
+                                            <td>{{ $item->alternatif->nama }}</td>
+                                            <td>{{ $item->alternatif->jabatan }}</td>
                                             <td>
                                                 <div class="btn-group btn-block">
                                                     <button type="button" class="btn btn-danger btn-sm delete"
                                                         data-id="{{ $item->id }}"
-                                                        url="{{ route('kriteria.delete', $item->id) }}">
+                                                        url="{{ route('perhitungan.delete', $item->id) }}">
                                                         <i class="fas fa-trash"></i>
                                                     </button>
-                                                    <button type="button" class="btn btn-warning btn-sm"
-                                                        data-toggle="modal" data-target="#kriteria{{ $item->id }}">
-                                                        <i class="fas fa-pencil-ruler"></i>
-                                                    </button>
-                                                    <a href="{{ route('subkriteria', $item->id) }}" type="button"
-                                                        class="btn btn-info btn-sm">Sub</a>
                                                 </div>
                                             </td>
                                         </tr>
                                     @endforeach
-                                    @include('dashboard.kriteria.update')
                                 </tbody>
                             </table>
                         </div>

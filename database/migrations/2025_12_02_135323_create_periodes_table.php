@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('registered_alternatifs', function (Blueprint $table) {
+        Schema::create('periodes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('alternatif_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('subkrit_id')->constrained('sub_kriterias')->cascadeOnDelete();
-            $table->enum('status',['Pending','Success','Filed'])->default('Pending');
+            $table->string('nama');
+            $table->date('date_start');
+            $table->date('date_end');
             $table->timestamps();
         });
     }
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('registered_alternatifs');
+        Schema::dropIfExists('periodes');
     }
 };

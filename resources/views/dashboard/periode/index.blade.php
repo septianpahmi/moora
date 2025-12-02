@@ -14,9 +14,9 @@
                 </div>
                 <div class="col-sm-6">
                     <button type="button" class="btn btn-success float-sm-right" data-toggle="modal"
-                        data-target="#kriteria">Tambah {{ $title }}</button>
+                        data-target="#periode">Tambah {{ $title }}</button>
                 </div>
-                @include('dashboard.kriteria.create')
+                @include('dashboard.periode.create')
             </div>
         </div>
     </div>
@@ -34,10 +34,9 @@
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>Kode</th>
-                                        <th>Kriteria</th>
-                                        <th>Bobot</th>
-                                        <th>Tipe</th>
+                                        <th>Nama</th>
+                                        <th>Tanggal Mulai</th>
+                                        <th>Tanggal Selesai</th>
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -45,28 +44,25 @@
                                     @foreach ($data as $item)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
-                                            <th>{{ $item->code }}</th>
-                                            <td>{{ $item->title }}</td>
-                                            <td>{{ number_format($item->bobot, 0) }}</td>
-                                            <td>{{ $item->type }}</td>
+                                            <td>{{ $item->nama }}</td>
+                                            <td>{{ Carbon\Carbon::parse($item->date_start)->format('d F Y') }}</td>
+                                            <td>{{ Carbon\Carbon::parse($item->date_end)->format('d F Y') }}</td>
                                             <td>
                                                 <div class="btn-group btn-block">
                                                     <button type="button" class="btn btn-danger btn-sm delete"
                                                         data-id="{{ $item->id }}"
-                                                        url="{{ route('kriteria.delete', $item->id) }}">
+                                                        url="{{ route('periode.delete', $item->id) }}">
                                                         <i class="fas fa-trash"></i>
                                                     </button>
                                                     <button type="button" class="btn btn-warning btn-sm"
-                                                        data-toggle="modal" data-target="#kriteria{{ $item->id }}">
+                                                        data-toggle="modal" data-target="#periode{{ $item->id }}">
                                                         <i class="fas fa-pencil-ruler"></i>
                                                     </button>
-                                                    <a href="{{ route('subkriteria', $item->id) }}" type="button"
-                                                        class="btn btn-info btn-sm">Sub</a>
                                                 </div>
                                             </td>
                                         </tr>
                                     @endforeach
-                                    @include('dashboard.kriteria.update')
+                                    @include('dashboard.periode.update')
                                 </tbody>
                             </table>
                         </div>

@@ -2,9 +2,10 @@
 
 use App\Http\Controllers\AlternatifController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\KriteriController;
+use App\Http\Controllers\KriteriaController;
+use App\Http\Controllers\Moora\PerhitunganController;
+use App\Http\Controllers\PeriodeController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\RegisteredAlternatifController;
 use App\Http\Controllers\SubkriteriaController;
 use Illuminate\Support\Facades\Route;
 /*
@@ -30,28 +31,30 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    Route::get('/kriteria', [KriteriController::class, 'index'])->name('kriteria');
-    Route::post('/kriteria/create', [KriteriController::class, 'create'])->name('kriteria.create');
-    Route::get('/kriteria/delete/{id}', [KriteriController::class, 'delete'])->name('kriteria.delete');
-    Route::post('/kriteria/update/{id}', [KriteriController::class, 'update'])->name('kriteria.update');
-    
-    Route::get('/subkriteria', [SubkriteriaController::class, 'index'])->name('subkriteria');
-    Route::post('/subkriteria/create', [SubkriteriaController::class, 'create'])->name('subkriteria.create');
-    Route::get('/subkriteria/delete/{id}', [SubkriteriaController::class, 'delete'])->name('subkriteria.delete');
-    Route::post('/subkriteria/update/{id}', [SubkriteriaController::class, 'update'])->name('subkriteria.update');
+    Route::get('/kriteria', [KriteriaController::class, 'index'])->name('kriteria');
+    Route::get('/kriteria/{id}/delete', [KriteriaController::class, 'delete'])->name('kriteria.delete');
+    Route::post('/kriteria/create', [KriteriaController::class, 'create'])->name('kriteria.create');
+    Route::post('/kriteria/{id}/update', [KriteriaController::class, 'update'])->name('kriteria.update');
+
+    Route::get('/subkriteria/{id}/view', [SubkriteriaController::class, 'index'])->name('subkriteria');
+    Route::get('/subkriteria/{id}/delete', [SubkriteriaController::class, 'delete'])->name('subkriteria.delete');
+    Route::post('/subkriteria/{kriteria}/create', [SubkriteriaController::class, 'create'])->name('subkriteria.create');
+    Route::post('/subkriteria/{id}/{kriteria}/update', [SubkriteriaController::class, 'update'])->name('subkriteria.update');
+
+    Route::get('/periode', [PeriodeController::class, 'index'])->name('periode');
+    Route::get('/periode/{id}/delete', [PeriodeController::class, 'delete'])->name('periode.delete');
+    Route::post('/periode/create', [PeriodeController::class, 'create'])->name('periode.create');
+    Route::post('/periode/{id}/update', [PeriodeController::class, 'update'])->name('periode.update');
 
     Route::get('/alternatif', [AlternatifController::class, 'index'])->name('alternatif');
+    Route::get('/alternatif/{id}/delete', [AlternatifController::class, 'delete'])->name('alternatif.delete');
     Route::post('/alternatif/create', [AlternatifController::class, 'create'])->name('alternatif.create');
-    Route::get('/alternatif/delete/{id}', [AlternatifController::class, 'delete'])->name('alternatif.delete');
-    Route::post('/alternatif/update/{id}', [AlternatifController::class, 'update'])->name('alternatif.update');
-    
-    Route::get('/perhitungan', [RegisteredAlternatifController::class, 'index'])->name('perhitungan');
-    Route::post('/perhitungan/create/{id}', [RegisteredAlternatifController::class, 'create'])->name('perhitungan.create');
-    //perhitungan
-    Route::get('/perhitungan/moora', [RegisteredAlternatifController::class, 'moora'])->name('perhitungan.moora');
-    Route::get('/perhitungan/matrik-x', [RegisteredAlternatifController::class, 'matrik'])->name('perhitungan.matrik');
-    Route::get('/perhitungan/normalisasi-r', [RegisteredAlternatifController::class, 'normalisasi'])->name('perhitungan.normalisasi');
+    Route::post('/alternatif/{id}/update', [AlternatifController::class, 'update'])->name('alternatif.update');
 
+    Route::get('/perhitungan', [PerhitunganController::class, 'index'])->name('perhitungan');
+    Route::get('/perhitungan/moora', [PerhitunganController::class, 'moora'])->name('perhitungan.moora');
+    Route::get('/perhitungan/moora/{id}/delete', [PerhitunganController::class, 'delete'])->name('perhitungan.delete');
+    Route::post('/perhitungan/moora/{id}/create', [PerhitunganController::class, 'create'])->name('perhitungan.create');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

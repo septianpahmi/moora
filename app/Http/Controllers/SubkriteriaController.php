@@ -8,35 +8,47 @@ use Illuminate\Http\Request;
 
 class SubkriteriaController extends Controller
 {
-    public function index(){
-        $title = 'subkriteria';
-        $data = SubKriteria::all();
-        $kriteria = Kriteria::all();
-        return view('dashboard.subkriteria.index', compact('title','data','kriteria'));
-    }
-    
-    public function create(Request $request){
-        SubKriteria::create([
-            'title' => $request->title,
-            'bobot' => $request->bobot,
-            'kriteria_id' => $request->kriteria_id
-        ]);
-
-    return redirect()->back()->with('success','Sub Kriteria berhasil dibuat');
+    public function index($id)
+    {
+        $title = "Sub Kriteria";
+        $data = SubKriteria::where('kriteria_id', $id)->get();
+        $kriteria = Kriteria::where('id', $id)->first();
+        return view('dashboard.subkriteria.index', compact('title', 'data', 'kriteria'));
     }
 
-    public function delete($id){
+    public function delete($id)
+    {
         $data = SubKriteria::find($id);
         $data->delete();
-
-        return redirect()->back()->with('success','Sub Kriteria berhasil dihapus');
+        return Redirect()->back()->with('success', 'Data Berhasil dihapus.');
     }
 
-    public function update(Request $request, $id){
+    public function create(Request $request, $kriteria)
+    {
+        if ($request->bobot > 100) {
+            return Redirect()->back()->with('error', 'Bobot tidak bole lebih dari 100');
+        }
+        SubKriteria::create([
+            'kriteria_id' => $kriteria,
+            'title' => $request->title,
+            'bobot' => $request->bobot,
+        ]);
+
+        return Redirect()->back()->with('success', 'Data berhasil ditambah.');
+    }
+
+    public function update(Request $request, $id, $kriteria)
+    {
+        if ($request->bobot > 100) {
+            return Redirect()->back()->with('error', 'Bobot tidak bole lebih dari 100');
+        }
         $data = SubKriteria::find($id);
-        $data->title = $request->title;
-        $data->bobot = $request->bobot;
-        $data->save();
-    return redirect()->back()->with('success','Kriteria berhasil diubah');
+        $data->update([
+            'kriteria_id'  => $kriteria,
+            'title' => $request->title,
+            'bobot' => $request->bobot,
+        ]);
+
+        return Redirect()->back()->with('success', 'Data Berhasil diperbarui.');
     }
 }
