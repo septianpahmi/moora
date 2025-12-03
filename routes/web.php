@@ -3,6 +3,7 @@
 use App\Http\Controllers\AlternatifController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KriteriaController;
+use App\Http\Controllers\Moora\MooraController;
 use App\Http\Controllers\Moora\PerhitunganController;
 use App\Http\Controllers\PeriodeController;
 use App\Http\Controllers\ProfileController;
@@ -52,9 +53,14 @@ Route::middleware('auth')->group(function () {
     Route::post('/alternatif/{id}/update', [AlternatifController::class, 'update'])->name('alternatif.update');
 
     Route::get('/perhitungan', [PerhitunganController::class, 'index'])->name('perhitungan');
-    Route::get('/perhitungan/moora', [PerhitunganController::class, 'moora'])->name('perhitungan.moora');
+    Route::get('/perhitungan/moora/', [PerhitunganController::class, 'moora'])->name('perhitungan.moora');
     Route::get('/perhitungan/moora/{id}/delete', [PerhitunganController::class, 'delete'])->name('perhitungan.delete');
     Route::post('/perhitungan/moora/{id}/create', [PerhitunganController::class, 'create'])->name('perhitungan.create');
+
+    Route::get('/perhitungan/matrik-keputusan/{id}', [MooraController::class, 'stepone'])->name('matriKeputusan');
+    Route::get('/perhitungan/normalisasi/{periode}', [MooraController::class, 'steptwo'])->name('normalisasi');
+    Route::get('/perhitungan/Pembobotan/{periode}', [MooraController::class, 'stepThree'])->name('pembobotan');
+    Route::get('/perhitungan/optimasi/{periode}', [MooraController::class, 'stepfour'])->name('optimasi');
 });
 
 require __DIR__ . '/auth.php';
