@@ -38,11 +38,11 @@
             "buttons": ["excel", "pdf", "print", "colvis"]
         }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
         $('#example2').DataTable({
-            "paging": true,
+            "paging": false,
             "lengthChange": false,
-            "searching": false,
-            "ordering": true,
-            "info": true,
+            "searching": true,
+            "ordering": false,
+            "info": false,
             "autoWidth": false,
             "responsive": true,
         });
@@ -99,6 +99,25 @@
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
             confirmButtonText: "Yes, change it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location = "" + url + ""
+
+            }
+
+        });
+    });
+</script>
+<script>
+    $('.moora').click(function() {
+        var url = $(this).attr('url')
+        Swal.fire({
+            title: "Anda Yakin Ingin Melanjutkan?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Lanjutkan!"
         }).then((result) => {
             if (result.isConfirmed) {
                 window.location = "" + url + ""

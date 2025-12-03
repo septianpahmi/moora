@@ -31,7 +31,7 @@
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
-                            <table id="example1" class="table table-bordered table-striped">
+                            <table id="example2" class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
                                         <th>#</th>
@@ -60,7 +60,13 @@
                                         </tr>
                                     @endforeach
                                 </tbody>
+
                             </table>
+                        </div>
+                        <div class="card-footer text-right">
+                            <button type="button" class="btn btn-primary moora"
+                                url="{{ route('matriKeputusan', $data->id) }}">Mulai
+                                perhitungan</button>
                         </div>
                     </div>
                 </div>
