@@ -35,6 +35,7 @@
             "responsive": true,
             "lengthChange": false,
             "autoWidth": false,
+            "ordering": false,
             "buttons": ["excel", "pdf", "print", "colvis"]
         }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
         $('#example2').DataTable({

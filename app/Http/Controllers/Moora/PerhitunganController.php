@@ -49,6 +49,7 @@ class PerhitunganController extends Controller
 
         $exists = Penilaian::where('alternatif_id', $request->alternatif_id)
             ->where('periode_id', $id)
+            ->where('status', 'Belum dihitung')
             ->exists();
 
         if ($exists) {

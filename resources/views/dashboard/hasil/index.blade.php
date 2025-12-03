@@ -5,9 +5,12 @@
     <div class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
-                <div class="col-sm-12">
+                <div class="col-sm-6">
                     <h1 class="m-0">{{ $title }}</h1>
-                    <ol class="breadcrumb ">
+
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
                         <li class="breadcrumb-item active">{{ $title }}</li>
                     </ol>
@@ -23,40 +26,27 @@
                         <div class="card-header">
                             <h3 class="card-title">DataTable {{ $title }}</h3>
                         </div>
+                        <!-- /.card-header -->
                         <div class="card-body">
-                            <table id="example" class="table table-bordered table-striped">
+                            <table id="example1" class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
-                                        <th>#</th>
-                                        <th>Alternatif</th>
-                                        @foreach ($kriteria as $k)
-                                            <th>{{ $k->code ?? 'C' . $loop->iteration }}</th>
-                                        @endforeach
+                                        <th>Periode</th>
+                                        <th>Waktu</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($data as $alternatif_id => $items)
+                                    @foreach ($periode as $item)
                                         <tr>
-                                            <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $items->first()->alternatif->nama }}</td>
-
-                                            @foreach ($kriteria as $k)
-                                                @php
-                                                    $nilai = $items->firstWhere('subkrit.kriteria_id', $k->id);
-                                                @endphp
-
-                                                <td>{{ number_format($nilai->subkrit->bobot ?? '-', 0) }}</td>
-                                            @endforeach
+                                            <td width="70%"><a href="{{ route('hasil.get', ['periode' => $item->id]) }}"
+                                                    class="card-title font-weight-bold">{{ $item->nama }} </a>
+                                            </td>
+                                            <td>{{ Carbon\Carbon::parse($item->date_start)->format('d/m/Y') }} -
+                                                {{ Carbon\Carbon::parse($item->date_end)->format('d/m/Y') }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>
                             </table>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <a href="{{ route('normalisasi', ['periode' => $periode->id]) }}"
-                                class="btn btn-success btn-block">Selanjutnya</a>
                         </div>
                     </div>
                 </div>

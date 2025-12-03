@@ -30,8 +30,8 @@
                                         <tr>
                                             <th>#</th>
                                             <th>Alternatif</th>
-                                            <th>Total Benefit</th>
-                                            <th>Total Cost</th>
+                                            <th>MAX</th>
+                                            <th>MIN</th>
                                             <th>Nilai Yi</th>
                                             <th>Ranking</th>
                                         </tr>
@@ -47,7 +47,7 @@
                                                 <td>{{ number_format($row['Cost'], 4) }}</td>
                                                 <td><strong>{{ number_format($row['Yi'], 4) }}</strong></td>
                                                 <td class="text-center">
-                                                    <span class="badge bg-success">{{ $row['ranking'] }}</span>
+                                                    {{ $row['ranking'] }}
                                                 </td>
                                             </tr>
                                         @endforeach

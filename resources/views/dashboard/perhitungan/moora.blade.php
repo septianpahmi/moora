@@ -38,6 +38,7 @@
                                         <th>NIP</th>
                                         <th>Nama</th>
                                         <th>Jabatan</th>
+                                        <th>Status</th>
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -48,6 +49,18 @@
                                             <td>{{ $item->alternatif->nip }}</td>
                                             <td>{{ $item->alternatif->nama }}</td>
                                             <td>{{ $item->alternatif->jabatan }}</td>
+                                            <td>
+                                                @if ($item->status == 'Belum dihitung')
+                                                    <button type="button" class="btn btn-outline-warning"
+                                                        disabled>Belum dihitung</button>
+                                                @elseif($item->status == 'Selesai')
+                                                    <button type="button" class="btn btn-outline-success"
+                                                        disabled>Selesai</button>
+                                                @else
+                                                    <button type="button" class="btn btn-outline-danger"
+                                                        disabled>Dibatalkan</button>
+                                                @endif
+                                            </td>
                                             <td>
                                                 <div class="btn-group btn-block">
                                                     <button type="button" class="btn btn-danger btn-sm delete"

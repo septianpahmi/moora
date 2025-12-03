@@ -18,4 +18,9 @@ class Periode extends Model
     {
         return $this->hasMany(Penilaian::class);
     }
+
+    public function hasil()
+    {
+        return $this->hasMany(Hasil::class);
+    }
 }

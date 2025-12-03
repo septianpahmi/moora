@@ -11,13 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('penilaians', function (Blueprint $table) {
+        Schema::create('hasils', function (Blueprint $table) {
             $table->id();
             $table->foreignId('alternatif_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('subkrit_id')->constrained('sub_kriterias')->cascadeOnDelete();
             $table->foreignId('periode_id')->constrained()->cascadeOnDelete();
-            $table->decimal('nilai', 5, 2);
-            $table->enum('status', ['Belum dihitung', 'Dibatalkan', 'Selesai'])->default('Belum dihitung');
+            $table->decimal('max', 15, 2);
+            $table->decimal('min', 15, 2);
+            $table->decimal('yi', 15, 2);
+            $table->integer('rank');
             $table->timestamps();
         });
     }
@@ -27,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('penilaians');
+        Schema::dropIfExists('hasils');
     }
 };

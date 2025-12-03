@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AlternatifController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\HasilController;
 use App\Http\Controllers\KriteriaController;
 use App\Http\Controllers\Moora\MooraController;
 use App\Http\Controllers\Moora\PerhitunganController;
@@ -61,6 +62,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/perhitungan/normalisasi/{periode}', [MooraController::class, 'steptwo'])->name('normalisasi');
     Route::get('/perhitungan/Pembobotan/{periode}', [MooraController::class, 'stepThree'])->name('pembobotan');
     Route::get('/perhitungan/optimasi/{periode}', [MooraController::class, 'stepfour'])->name('optimasi');
+
+    Route::get('/hasil-perhitungan', [HasilController::class, 'index'])->name('hasil');
+    Route::get('/hasil-perhitungan/{periode}/get', [HasilController::class, 'getData'])->name('hasil.get');
 });
 
 require __DIR__ . '/auth.php';

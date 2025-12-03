@@ -9,6 +9,7 @@ use App\Models\Alternatif;
 use App\Models\SubKriteria;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Hasil;
 
 class MooraController extends Controller
 {
@@ -21,6 +22,14 @@ class MooraController extends Controller
         $data = Penilaian::where('periode_id', $id)->with([
             'alternatif',
         ])->get()->groupBy('alternatif_id');
+        $sudahAdaHasil = Hasil::where('periode_id', $id)->exists();
+        $semuaPenilaianSelesai = Penilaian::where('periode_id', $id)
+            ->where('status', 'Selesai')
+            ->exists();
+
+        if ($sudahAdaHasil || $semuaPenilaianSelesai) {
+            return redirect()->back()->with('error', 'Perhitungan untuk periode ini sudah dilakukan — jika ingin menghitung ulang, hapus terlebih dahulu hasil sebelumnya.');
+        }
         return view('dashboard.moora.step1', compact('data', 'title', 'kriteria', 'periode'));
     }
 
@@ -79,25 +88,22 @@ class MooraController extends Controller
         ];
 
         foreach ($kriteria as $k) {
-            // hitung sum kuadrat untuk kriteria ini
             $sumSquare = 0;
 
             foreach ($alternatifs as $alt) {
-                // cari penilaian yang sesuai alternatif+kriteria
                 $p = $penilaians->first(function ($row) use ($alt, $k) {
                     return $row->alternatif_id == $alt->id
                         && $row->subkrit !== null
                         && $row->subkrit->kriteria_id == $k->id;
                 });
 
-                $x = $p->nilai ?? 0; // gunakan field 'nilai' pada Penilaian
+                $x = $p->nilai ?? 0;
                 $sumSquare += pow($x, 2);
             }
 
             $pembagi = sqrt($sumSquare);
             $normalisasi['pembagi'][$k->id] = $pembagi > 0 ? $pembagi : 0;
 
-            // hitung R_ij untuk tiap alternatif
             foreach ($alternatifs as $alt) {
                 $p = $penilaians->first(function ($row) use ($alt, $k) {
                     return $row->alternatif_id == $alt->id
@@ -125,9 +131,7 @@ class MooraController extends Controller
             ->get()
             ->groupBy('alternatif_id');
 
-        // ambil hasil normalisasi dari step2
         $normalisasi = $this->hitungNormalisasi($periode);
-        // array output
         $bobotData = [];
 
         foreach ($data as $alternatif_id => $items) {
@@ -138,11 +142,8 @@ class MooraController extends Controller
 
                 $Rij = $normalisasi['nilai'][$alternatif_id][$k->id] ?? 0;
 
-                // dd($Rij);
-                // *sama seperti kode lama Anda: (nilai/pembagi) × bobot*
                 $Yij = $Rij * $k->bobot;
 
-                // simpan
                 $row[$k->id] = $Yij;
             }
 
@@ -166,9 +167,7 @@ class MooraController extends Controller
             ->get()
             ->groupBy('alternatif_id');
 
-        // ambil hasil normalisasi dari step2
         $normalisasi = $this->hitungNormalisasi($periode);
-        // array output
         $bobotData = [];
 
         foreach ($data as $alternatif_id => $items) {
@@ -179,11 +178,7 @@ class MooraController extends Controller
 
                 $Rij = $normalisasi['nilai'][$alternatif_id][$k->id] ?? 0;
 
-                // dd($Rij);
-                // *sama seperti kode lama Anda: (nilai/pembagi) × bobot*
                 $Yij = $Rij * $k->bobot;
-
-                // simpan
                 $row[$k->id] = $Yij;
             }
 
@@ -197,12 +192,8 @@ class MooraController extends Controller
         return view('dashboard.moora.step3', compact('title', 'kriteria', 'data', 'bobotData', 'periodeId'));
     }
 
-    /**
-     * Step 3 — Normalisasi Terbobot (Yij = Rij × bobot)
-     */
     private function hitungPembobotan($periode)
     {
-        // Ambil hasil normalisasi dari step 2
         $step2 = $this->steptwo($periode);
 
         $kriteria    = $step2['kriteria'];
@@ -212,15 +203,10 @@ class MooraController extends Controller
             'nilai' => []
         ];
 
-        // Loop berdasarkan alternatif
         foreach ($normalisasi['nilai'] as $alternatif_id => $nilaiPerKriteria) {
 
             foreach ($kriteria as $k) {
-
-                // Nilai normalisasi Rij
                 $Rij = $nilaiPerKriteria[$k->id] ?? 0;
-
-                // Hitung Yij = Rij × Bobot Kriteria
                 $pembobotan['nilai'][$alternatif_id][$k->id] =
                     $Rij * ($k->bobot ?? 0);
             }
@@ -234,7 +220,7 @@ class MooraController extends Controller
     {
         $title = "Hasil Perhitungan Yi (Optimisasi)";
         $periodeId = Periode::find($periode);
-        $kriteria   = Kriteria::orderBy('id')->get();
+        $kriteria = Kriteria::orderBy('id')->get();
 
         $pembobotan = $this->hitungPembobotan($periode);
 
@@ -248,12 +234,12 @@ class MooraController extends Controller
         foreach ($data as $alternatif_id => $items) {
 
             $benefit = 0;
-            $cost    = 0;
+            $cost = 0;
 
             foreach ($kriteria as $k) {
 
                 $Yij = $pembobotan['nilai'][$alternatif_id][$k->id] ?? 0;
-                // dd($Yij);
+
                 if ($k->type == 'Benefit') {
                     $benefit += $Yij;
                 } else {
@@ -264,11 +250,33 @@ class MooraController extends Controller
             $Yi = $benefit - $cost;
 
             $hasilYi[$alternatif_id] = [
-                'alternatif' => $items->first()->alternatif->nama,
-                'Benefit'    => $benefit,
-                'Cost'       => $cost,
-                'Yi'         => $Yi
+                'alternatif_id' => $alternatif_id,
+                'alternatif'    => $items->first()->alternatif->nama,
+                'Benefit'       => $benefit,
+                'Cost'          => $cost,
+                'Yi'            => $Yi,
+                'periode_id'    => $items->first()->periode_id
             ];
+        }
+
+        $cekHasil = Hasil::where('periode_id', $periode)->count();
+
+        if ($cekHasil == 0) {
+            $sorted = collect($hasilYi)->sortByDesc('Yi')->values();
+            foreach ($sorted as $index => $row) {
+                Hasil::create([
+                    'alternatif_id' => $row['alternatif_id'],
+                    'periode_id'    => $row['periode_id'],
+                    'max'           => $row['Benefit'],
+                    'min'           => $row['Cost'],
+                    'yi'            => $row['Yi'],
+                    'rank'          => $index + 1
+                ]);
+            }
+
+            Penilaian::where('periode_id', $periode)->update([
+                'status' => 'Selesai'
+            ]);
         }
 
         usort($hasilYi, fn($a, $b) => $b['Yi'] <=> $a['Yi']);
@@ -278,6 +286,11 @@ class MooraController extends Controller
             $hasilYi[$index]['ranking'] = $rank++;
         }
 
-        return view('dashboard.moora.step4', compact('title', 'periodeId', 'hasilYi', 'kriteria'));
+        return view('dashboard.moora.step4', compact(
+            'title',
+            'periodeId',
+            'hasilYi',
+            'kriteria'
+        ));
     }
 }

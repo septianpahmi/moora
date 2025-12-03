@@ -1,10 +1,15 @@
  <!-- Main Sidebar Container -->
  <aside class="main-sidebar sidebar-dark-primary elevation-4">
      <!-- Brand Logo -->
-     <a href="index3.html" class="brand-link">
-         <img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
-             style="opacity: .8">
-         <span class="brand-text font-weight-light">AdminLTE 3</span>
+     <a href="{{ route('dashboard') }}" class="brand-link">
+         <div class="row text-center">
+             <div class="col-12">
+                 <h3 class="font-weight-bold">CSS</h3>
+             </div>
+             <div class="col-12">
+                 <span class=" font-weight-light">Cimacan Score System</span>
+             </div>
+         </div>
      </a>
 
      <!-- Sidebar -->
@@ -62,9 +67,10 @@
                          </p>
                      </a>
                  </li>
+                 <li class="nav-header">REPORT</li>
                  <li class="nav-item">
-                     <a href="{{ route('perhitungan') }}"
-                         class="nav-link {{ Request::is(['perhitungan']) ? ' active' : '' }}">
+                     <a href="{{ route('hasil') }}"
+                         class="nav-link {{ Request::is(['hasil-perhitungan', 'hasil-perhitungan/*/get']) ? ' active' : '' }}">
                          <i class="nav-icon fas fa-file-medical-alt"></i>
                          <p>
                              Hasil Perhitungan
